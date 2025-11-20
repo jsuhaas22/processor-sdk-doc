@@ -1,0 +1,81 @@
+#####################
+OP-TEE Secure Storage
+#####################
+
+********
+Overview
+********
+
+There is often the need to securely store sensitive data such as
+cryptographic keys, certificates and other application-specific or
+general-purpose information. This security must be guaranteed even if
+the normal world is compromised.
+
+To guarantee such security, OP-TEE provides two "Secure Storage"
+mechanisms. These are:
+
+#. REE_FS: Data is stored in normal world filesystem, as encrypted
+   binary blobs.
+
+#. RPMB: Data is stored in a special partition of eMMC, which can be
+   accessed only by the TEE world.
+
+To learn more about REE_FS and RPMB, refer: 
+
+In TI SDK, REE_FS is enabled by-default, while RPMB is kept
+disabled. Data is stored in `/var/lib/tee/`.
+
+***************
+Demo'ing REE_FS
+***************
+
+Type ``optee_examples_secure_storage``. During odd-numbered
+invocations, it 
+
+**********
+Using RPMB
+**********
+
+Re-Compiling OP-TEE
+===================
+
+The first step to using RPMB is to re-compile U-Boot and OP-TEE with
+RPMB, with the required flags. These flags are:
+
+* CFG_REE_FS=n: This disables REE_FS, and lets TA's use RPMB
+  by-default.
+* CFG_RPMB_FS=y: This enables RPMB_FS.
+* CFG_RPMB_WRITE_KEY=y: This directs OP-TEE to generate and write an
+  Authentication Key if one is not programmed already, on first write
+  access. This option must NEVER be enabled on production builds.
+
+.. warning::
+
+   CFG_RPMB_WRITE_KEY should **always** be disabled in production
+   build. Enabling it sends the Authentication Key in plain-text to
+   the normal world, which is a huge security risk!
+
+* CFG_RPMB_TESTKEY=n: 
+
+<link optee docs>
+<link u-boot docs>
+
+
+
+Using RPMB
+==========
+
+To use RPMB, we need an "Authentication Key". This key is programmed
+into a one-time programmable region of the storage device. Subsequent
+write operations to the RPMB check the authenticity of the incoming
+message using this key. If key verification fails, the operation fails
+too.
+
+There are 2 ways to program an Authentication Key. The first is to
+generate it using the CFG_RPMB_WRITE_KEY=y flag while compiling
+optee_os. The second is to use other tools, such as ``mmc-tools``, to
+write a key into the eMMC.
+
+In case of the first option, optee_os generates a key and writes it
+into the eMMC if it detects that a key isn't written already. To do
+so, it sends the key in plaintext to the normal world. 
