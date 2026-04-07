@@ -300,6 +300,26 @@ software only implementation can be compared to the previous test.
    Page size (bytes): 4096
    Exit status: 0
 
+*******************************
+Hardware Performance Comparison
+*******************************
+
+The following table shows AES-128-CBC throughput measured using ``openssl speed``
+across the SA2UL hardware accelerator, ARM Cryptographic Extension (CE), and
+baseline ARM CPU.
+
+.. ifconfig:: CONFIG_part_variant in ('AM62X')
+
+   .. include:: ../../../../../devices/AM62X/linux/_crypto_perf_aes_128_cbc.rst
+
+.. ifconfig:: CONFIG_part_variant in ('AM62PX')
+
+   .. include:: ../../../../../devices/AM62PX/linux/_crypto_perf_aes_128_cbc.rst
+
+.. ifconfig:: CONFIG_part_variant in ('AM64X')
+
+   .. include:: ../../../../../devices/AM64X/linux/_crypto_perf_aes_128_cbc.rst
+
 ***********************************
 Using the TRNG Hardware Accelerator
 ***********************************
