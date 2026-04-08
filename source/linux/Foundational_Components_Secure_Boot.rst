@@ -35,7 +35,7 @@ Kernel/DTB/initfamfs. This is accomplished by calling into TIFS via TI-SCI (Texa
 the same signing/encrypting tools used to authenticate the first-stage image. For more infomation using TI_SCI methods refer to the
 `TISCI User Guide <https://software-dl.ti.com/tisci/esd/22_01_02/index.html>`__.
 
-.. Image:: /images/K3_KF.JPG
+.. Image:: /images/K3_KF_Updated.png
         :scale: 70%
 
 Secure boot is like an onion, it has layers. Some layers are trusted more than others. Secure ROM has the highest trust and REE (Run-time Execution
